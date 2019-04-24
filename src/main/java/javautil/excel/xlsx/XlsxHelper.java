@@ -182,15 +182,19 @@ public class XlsxHelper {
 		if (row == null)
 			return null;
 		Iterator<Cell> cellIterator = row.cellIterator();
-
+        int col=0;
 		while (cellIterator.hasNext()) {
 			Cell cell = cellIterator.next();
-			values.add(cell.getColumnIndex(), getCellStringValue(cell));
+			values.add(col, getCellStringValue(cell));
+			col++;		
 
 		}
 		return values;
 	}
 
+	
+	
+	
 	/**
 	 * return cell's string value; ignore the value type
 	 * 

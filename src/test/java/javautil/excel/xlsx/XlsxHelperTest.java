@@ -18,8 +18,8 @@ import org.junit.Test;
 
 public class XlsxHelperTest {
 
-	//static String path = "C:\\Users\\Public\\Documents\\test.xlsx";
-	static String path = "target/test.xlsx";
+	static String path = "C:\\Users\\Public\\Documents\\test.xlsx";
+	//static String path = "target/test.xlsx";
 
 	@BeforeClass
 	public static void TestCreateXlsxFile() throws IOException, EncryptedDocumentException, InvalidFormatException {
