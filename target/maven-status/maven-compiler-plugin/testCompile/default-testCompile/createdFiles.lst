@@ -1,2 +1,6 @@
-javautil\excel\xlsx\XlsxHelperTest.class
+javautil\ignore\XMLGenerator1.class
 com\mkyong\utils\CSVUtilsTest.class
+javautil\ignore\XMLGenerator.class
+javautil\excel\xlsx\XlsxHelperTestCompare.class
+javautil\excel\xlsx\XlsxHelperTest.class
+javautil\ignore\testtest.class

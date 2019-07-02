@@ -23,10 +23,12 @@ import org.json.JSONObject;
 public class XlsxHelper {
 
 	public Workbook workbook;
+	public FormulaEvaluator eval;
 
 	public static void createXlsx(String filePath)
 			throws EncryptedDocumentException, InvalidFormatException, FileNotFoundException, IOException {
 		Workbook wb = new XSSFWorkbook(); // or new HSSFWorkbook();
+
 		FileOutputStream fileOut = new FileOutputStream(filePath);
 		@SuppressWarnings("unused")
 		Sheet sheet = wb.createSheet("Sheet1");
@@ -38,6 +40,7 @@ public class XlsxHelper {
 	public XlsxHelper(String filePath) throws IOException {
 		InputStream inputStream = new FileInputStream(filePath);
 		workbook = new XSSFWorkbook(inputStream);
+		eval = workbook.getCreationHelper().createFormulaEvaluator();
 
 	}
 
@@ -49,12 +52,12 @@ public class XlsxHelper {
 	}
 
 	/***
-	 * write JSON Array data into spreadsheet, each object will be write to one
-	 * row The key will write to the header for example [
+	 * write JSON Array data into spreadsheet, each object will be write to one row
+	 * The key will write to the header for example [
 	 * {"id":"1","name":"rachel","address":"hawk", "phone": 134},
 	 * {"id":"2","name":"max","address":"hawk1", "phone": 234},
-	 * {"id":"2","name":"raymond", "phone": 234} ] then, id, name, address,
-	 * phone will be used as header and values fill in as string
+	 * {"id":"2","name":"raymond", "phone": 234} ] then, id, name, address, phone
+	 * will be used as header and values fill in as string
 	 */
 	public void writeJSONArrayToSheet(Sheet sheet, JSONArray data, int startingRow) throws IOException {
 		Row headerRow = sheet.createRow(startingRow);
@@ -113,8 +116,8 @@ public class XlsxHelper {
 	 **/
 	private int appendRowEnd(String value, Row row) {
 		int col = row.getLastCellNum();
-		if (col ==-1)
-			col =0;
+		if (col == -1)
+			col = 0;
 		Cell newcell = row.createCell(col);
 		newcell.setCellValue(value);
 		return col;
@@ -141,8 +144,8 @@ public class XlsxHelper {
 			for (int j = 0; j < headers.size(); j++) {
 				if (headers.get(j).length() > 0) {
 					String value = "";
-					if( valueMatrix.get(i).size()>j && valueMatrix.get(i).get(j).length() > 0){
-						value= valueMatrix.get(i).get(j);
+					if (valueMatrix.get(i).size() > j && valueMatrix.get(i).get(j).length() > 0) {
+						value = valueMatrix.get(i).get(j);
 					}
 					currentRowObj.put(headers.get(j), value);
 				}
@@ -170,8 +173,8 @@ public class XlsxHelper {
 	}
 
 	/**
-	 * given sheet and row number, get list of values putting using column
-	 * number as index
+	 * given sheet and row number, get list of values putting using column number as
+	 * index
 	 */
 	protected List<String> getRowValueList(int rowNum, Sheet sheet) {
 		return getRowValueList(sheet.getRow(rowNum));
@@ -182,42 +185,45 @@ public class XlsxHelper {
 		if (row == null)
 			return null;
 		Iterator<Cell> cellIterator = row.cellIterator();
-        int col=0;
+		int col = 0;
 		while (cellIterator.hasNext()) {
 			Cell cell = cellIterator.next();
 			values.add(col, getCellStringValue(cell));
-			col++;		
+			col++;
 
 		}
 		return values;
 	}
 
-	
-	
-	
 	/**
 	 * return cell's string value; ignore the value type
 	 * 
 	 **/
 	@SuppressWarnings("deprecation")
 	private String getCellStringValue(Cell cell) {
-		String cellStringValue = "";
+
+		String cellStringValue = "";	
 		switch (cell.getCellType()) {
-		case Cell.CELL_TYPE_STRING:
+		case STRING:
 			cellStringValue = cell.getStringCellValue();
 			break;
-		case Cell.CELL_TYPE_BOOLEAN:
+		case BOOLEAN:
 			cellStringValue = cell.getBooleanCellValue() ? "true" : "false";
 			break;
-		case Cell.CELL_TYPE_NUMERIC:
+		case NUMERIC:
 			cellStringValue = new Double(cell.getNumericCellValue()).toString();
+			break;
+		case FORMULA:
+			CellValue cellValue = eval.evaluate(cell);
+			cellStringValue=cellValue.formatAsString();
+			
 			break;
 		default:
 			cellStringValue = "";
 		}
+		
 
 		return cellStringValue;
 	}
 
-	
 }

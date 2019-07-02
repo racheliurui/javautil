@@ -1,2 +1,3 @@
 com\mkyong\utils\CSVUtils.class
+javautil\file\TextFile.class
 javautil\excel\xlsx\XlsxHelper.class

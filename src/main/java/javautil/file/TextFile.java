@@ -4,6 +4,7 @@
 package javautil.file;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +36,16 @@ public class TextFile {
 	    byte[] strToBytes = filecontent.getBytes();
 	 
 	    Files.write(path, strToBytes);
+	}
+	
+	
+	public static boolean FileExist(String filepath)  {	
+	    File f = new File(filepath);
+	    if(f.exists() && !f.isDirectory()) { 
+	        return true;
+	    }else
+	    	return false;
+	    
 	}
 	
 }
