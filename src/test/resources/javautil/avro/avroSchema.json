@@ -1,0 +1,12 @@
+{
+    "type" : "record",
+    "name" : "userInfo",
+    "namespace" : "test.avro",
+    "fields" : [{"name" : "username", 
+                "type" : "string", 
+                "default" : "NONE"},
+
+                {"name" : "age", 
+                "type" : "int", 
+                "default" : -1}]
+} 
